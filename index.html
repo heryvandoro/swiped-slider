@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <title>Animated Slider - Jquery</title>
+    </head>
+    <style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing:border-box;
+		}
+		body, html{
+			margin: 0;
+			padding: 0;	
+			background-color: #bbb;
+		}
+		#container{
+			width: 600px;
+			display: table;
+			overflow: hidden;
+			margin: 10% auto;
+			height: 500px;
+		}
+		.item{
+			background-size: cover;
+			width: 50px;
+			display: inline-block;
+			text-align: center;
+			font-size: 46px;
+			cursor: pointer;
+			line-height: 500px;	
+			background-position: center bottom;
+			height: 500px;
+		}
+	</style>
+    <script src="jquery.js"></script>	
+    <body>
+    	<div id="container">
+        	<div class="item" style="background-image: url('images/1.png');"></div>
+			<div class="item" style="background-image: url('images/2.png');"></div>
+            <div class="item" style="background-image: url('images/3.jpg');"></div>
+            <div class="item" style="background-image: url('images/4.jpg');"></div>
+            <div class="item" style="background-image: url('images/5.png');"></div>
+            <div class="item" style="background-image: url('images/6.jpg');"></div>
+            <div class="item" style="background-image: url('images/7.png');"></div>
+            <div class="item" style="background-image: url('images/8.jpg');"></div>
+            <div class="item" style="background-image: url('images/9.jpg');"></div>
+            <div class="item" style="background-image: url('images/10.png');"></div>
+            <div class="item" style="background-image: url('images/11.jpg');"></div>
+            <div class="item" style="background-image: url('images/12.png');"></div>
+        </div>
+    </body>
+    <script>
+		$(document).ready(function(){
+			var canPlay = true;
+			$(".item").mouseenter(function(){
+				$(".item").removeClass("active");
+				$(this).addClass("active");
+				if(canPlay){
+					$(".item:not(.active)").animate({
+						"width" : (300/11)+"px",
+					});
+					$(this).animate({
+						"width" : "300px",
+					}, {
+						start : function(p){
+							canPlay = false;
+						},
+						done : function(){
+							canPlay = true;
+							if($(this).index()!=$(".item.active").index()){
+								$(".item.active").trigger('mouseenter');
+							}
+						}
+					}
+				)}
+			});
+
+			var con = $("#container").offset();
+
+			$("#container").mouseout(function(e){
+				var divPos = {
+					left: e.pageX - con.left,
+					top: e.pageY - con.top
+				};
+				if(divPos.left<0 || divPos.top<0 || divPos.left>$("#container").width() || divPos.top>$("#container").height()){
+					if($(".item.active").length!=0){
+						$(".item").animate({
+							"width" : "50px",
+							"background-position" : "200px 0"
+						});
+						$(".item").removeClass("active");
+					}
+				}			
+			});
+		});
+	</script>
+</html>
